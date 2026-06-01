@@ -1,0 +1,33 @@
+/*******************************************************************************
+ * Local site overrides
+ ******************************************************************************/
+
+@media (min-width: 576px) {
+  #navbar.fixed-top {
+    left: 0;
+    right: 0;
+    width: 100%;
+  }
+
+  #navbar > .container {
+    max-width: var(--max-content-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    justify-content: center;
+  }
+
+  #navbar .navbar-collapse-main {
+    flex-grow: 0;
+    justify-content: center;
+    text-align: center;
+  }
+
+  #navbar .navbar-menu-list {
+    margin-left: 0;
+    margin-right: 0;
+    align-items: center;
+    justify-content: center;
+  }
+}
