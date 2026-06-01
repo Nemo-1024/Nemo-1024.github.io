@@ -24,20 +24,21 @@ body.fixed-top-nav {
 
 @media (min-width: 576px) {
   #navbar.fixed-top {
-    left: 50%;
-    right: auto;
-    width: var(--max-content-width);
-    max-width: calc(100% - 30px);
-    transform: translateX(-50%);
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: none;
+    transform: none;
   }
 
   #navbar > .container {
     width: 100%;
-    max-width: 100%;
-    margin-left: 0;
-    margin-right: 0;
-    padding-left: 0;
-    padding-right: 0;
+    max-width: var(--max-content-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 15px;
+    padding-right: 15px;
     justify-content: flex-end;
   }
 
