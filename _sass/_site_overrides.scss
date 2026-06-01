@@ -31,3 +31,29 @@
     justify-content: center;
   }
 }
+
+body.fixed-top-nav .container[role="main"] {
+  padding-top: 2rem;
+}
+
+.post-header .post-title {
+  font-size: clamp(3rem, 5vw, 4.75rem);
+  font-weight: 400;
+  line-height: 1.05;
+  margin-bottom: 0.75rem;
+}
+
+.post-header .desc {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 575.98px) {
+  body.fixed-top-nav .container[role="main"] {
+    padding-top: 1rem;
+  }
+
+  .post-header .post-title {
+    font-size: 2.6rem;
+  }
+}
