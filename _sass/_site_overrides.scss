@@ -48,6 +48,13 @@ body.fixed-top-nav .container[role="main"] {
   margin-bottom: 2rem;
 }
 
+@media (min-width: 576px) {
+  .post:has(.profile.float-right) > .post-header {
+    max-width: calc(70% - 1rem);
+    text-align: right;
+  }
+}
+
 @media (max-width: 575.98px) {
   body.fixed-top-nav .container[role="main"] {
     padding-top: 1rem;
