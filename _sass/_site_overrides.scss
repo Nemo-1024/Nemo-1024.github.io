@@ -32,6 +32,22 @@
   }
 }
 
+#navbar .navbar-nav .nav-link,
+#navbar #search-toggle .nav-link,
+#navbar #light-toggle {
+  font-size: 1.35rem;
+}
+
+#navbar .navbar-nav .nav-link {
+  padding-left: 0.65rem;
+  padding-right: 0.65rem;
+}
+
+#navbar #search-toggle .fa-magnifying-glass,
+#navbar #light-toggle i {
+  font-size: 1.45rem;
+}
+
 body.fixed-top-nav .container[role="main"] {
   padding-top: 2rem;
 }
@@ -62,5 +78,16 @@ body.fixed-top-nav .container[role="main"] {
 
   .post-header .post-title {
     font-size: 2.6rem;
+  }
+
+  #navbar .navbar-nav .nav-link,
+  #navbar #search-toggle .nav-link,
+  #navbar #light-toggle {
+    font-size: 1rem;
+  }
+
+  #navbar #search-toggle .fa-magnifying-glass,
+  #navbar #light-toggle i {
+    font-size: 1.1rem;
   }
 }
