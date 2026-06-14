@@ -26,7 +26,7 @@ latest_posts:
 ---
 
 I am **Jialei Chen (陈佳磊)**, a Ph.D. student at Zhongguancun Academy.
-I work closely with [Prof. Chaoyu](https://zoeyuchao.github.io/) at Zhongguancun Academy on embodied intelligence, and I am also advised by [Prof. Yuanbo Xu](https://micxyb.github.io/) at Jilin University.
+I work closely with [Prof. Chao Yu](https://zoeyuchao.github.io/) at Zhongguancun Academy on embodied intelligence, and I am also advised by [Prof. Yuanbo Xu](https://micxyb.github.io/) at Jilin University.
 My research focuses on **embodied intelligence**, especially learning from human egocentric videos and latent dynamics for robot agents.
 My goal is to build data-efficient embodied agents that learn from human experience, understand physical dynamics, and generalize to real-world tasks.
 
