@@ -179,8 +179,9 @@ collections:
     defaults:
       layout: post
     output: true
-  projects:
+  blogs:
     output: true
+    permalink: /blogs/:path/
   teachings:
     output: true
 
