@@ -26,6 +26,32 @@ latest_posts:
   enabled: false
 ---
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfilePage",
+  "url": "https://nemo-1024.github.io/",
+  "mainEntity": {
+    "@type": "Person",
+    "@id": "https://nemo-1024.github.io/#jialei-chen",
+    "name": "Jialei Chen",
+    "alternateName": ["Chen Jialei", "陈佳磊"],
+    "url": "https://nemo-1024.github.io/",
+    "image": "https://nemo-1024.github.io/assets/img/prof_pic.jpg",
+    "jobTitle": "Ph.D. Student",
+    "affiliation": {
+      "@type": "Organization",
+      "name": "Zhongguancun Academy"
+    },
+    "description": "Jialei Chen is a Ph.D. student at Zhongguancun Academy researching embodied intelligence, robot learning, egocentric video learning, and latent dynamics.",
+    "sameAs": [
+      "https://github.com/Nemo-1024",
+      "https://scholar.google.com/citations?user=X55tOXIAAAAJ"
+    ]
+  }
+}
+</script>
+
 I am **Jialei Chen (陈佳磊)**, a Ph.D. student at Zhongguancun Academy.
 I work closely with [Prof. Chao Yu](https://zoeyuchao.github.io/) at Zhongguancun Academy on embodied intelligence, and I am also advised by [Prof. Yuanbo Xu](https://micxyb.github.io/) at Jilin University.
 My research focuses on **embodied intelligence**, especially learning from human egocentric videos and latent dynamics for robot agents.
