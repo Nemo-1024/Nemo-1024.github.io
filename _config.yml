@@ -9,7 +9,7 @@ last_name: Chen
 author: Jialei Chen
 contact_note: >
   For research discussions or collaboration, please contact me by email.
-description: > # the ">" symbol means to ignore newlines until "footer_text:"
+description: >- # fold wrapped lines and strip the trailing newline for valid JSON-LD
   Personal academic homepage of Jialei Chen, a Ph.D. student at Zhongguancun Academy researching embodied intelligence, robot learning, egocentric video learning, and latent dynamics.
 footer_text: >
   Powered by <a href="https://jekyllrb.com/" target="_blank">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio">al-folio</a>.

@@ -1,7 +1,7 @@
 ---
 layout: about
 permalink: /
-description: >
+description: >-
   Jialei Chen is a Ph.D. student at Zhongguancun Academy researching embodied intelligence, robot learning, egocentric video learning, and latent dynamics.
 subtitle: Ph.D. Student, Zhongguancun Academy
 
