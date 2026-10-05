@@ -45,7 +45,10 @@ latest_posts:
     "description": "Jialei Chen is a Ph.D. student at Zhongguancun Academy researching embodied intelligence, robot learning, egocentric video learning, and latent dynamics.",
     "sameAs": [
       "https://github.com/Nemo-1024",
-      "https://scholar.google.com/citations?user=X55tOXIAAAAJ"
+      "https://scholar.google.com/citations?user=X55tOXIAAAAJ",
+      "https://dblp.org/pid/225/5215-4.html",
+      "https://orcid.org/0009-0003-9861-7788",
+      "https://huggingface.co/jialei02"
     ]
   }
 }
