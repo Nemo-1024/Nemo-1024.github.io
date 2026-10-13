@@ -1,0 +1,16 @@
+{% assign citation = site.data.semantic_scholar_citations[include.key] %}
+{% if citation.citation_count != nil %}
+  <div class="semantic-scholar-badge-row">
+    <a
+      class="semantic-scholar-badge"
+      href="{{ citation.url | escape }}#citing-papers"
+      target="_blank"
+      rel="noopener noreferrer"
+      title="Semantic Scholar citations · Last updated {{ citation.updated_at | date: '%Y-%m-%d %H:%M UTC' }}"
+      aria-label="{{ citation.citation_count }} citations on Semantic Scholar for {{ citation.title | escape }}"
+    >
+      <span class="citation-source"><i class="fa-solid fa-quote-right" aria-hidden="true"></i> Semantic Scholar</span>
+      <span class="citation-count">{{ citation.citation_count }} {% if citation.citation_count == 1 %}citation{% else %}citations{% endif %}</span>
+    </a>
+  </div>
+{% endif %}

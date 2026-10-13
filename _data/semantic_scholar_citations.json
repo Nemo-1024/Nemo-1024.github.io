@@ -1,0 +1,23 @@
+{
+  "chen2026lawam": {
+    "paper_id": "996f843abe83a075ec19dd66c7f15fe8e073380e",
+    "title": "LaWAM: Latent World Action Models for Efficient Dynamics-Aware Robot Policies",
+    "citation_count": 56,
+    "url": "https://www.semanticscholar.org/paper/996f843abe83a075ec19dd66c7f15fe8e073380e",
+    "updated_at": "2026-10-13T06:31:41+00:00"
+  },
+  "chen2025unlocking": {
+    "paper_id": "4cfee2238bedc16f817ec1e6b0f4aa5e637a8560",
+    "title": "Unlocking the Power of Diffusion Models in Sequential Recommendation: A Simple and Effective Approach",
+    "citation_count": 19,
+    "url": "https://www.semanticscholar.org/paper/4cfee2238bedc16f817ec1e6b0f4aa5e637a8560",
+    "updated_at": "2026-10-13T06:31:51+00:00"
+  },
+  "chen2023deep": {
+    "paper_id": "0cdd00722929abc0cbc979062064ae8393a69283",
+    "title": "Deep Generative Imputation Model for Missing Not At Random Data",
+    "citation_count": 19,
+    "url": "https://www.semanticscholar.org/paper/0cdd00722929abc0cbc979062064ae8393a69283",
+    "updated_at": "2026-10-13T06:31:54+00:00"
+  }
+}

@@ -2,6 +2,52 @@
  * Local site overrides
  ******************************************************************************/
 
+.semantic-scholar-badge-row {
+  margin: 0.55rem 0 0.25rem;
+}
+
+.semantic-scholar-badge {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  overflow: hidden;
+  max-width: 100%;
+  border: 1px solid var(--global-divider-color);
+  border-radius: 5px;
+  color: var(--global-text-color);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  text-decoration: none;
+
+  .citation-source,
+  .citation-count {
+    padding: 0.22rem 0.55rem;
+  }
+
+  .citation-source i {
+    margin-right: 0.25rem;
+    color: var(--global-theme-color);
+  }
+
+  .citation-count {
+    background: var(--global-theme-color);
+    color: var(--global-bg-color);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &:hover {
+    color: var(--global-text-color);
+    border-color: var(--global-theme-color);
+    text-decoration: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--global-theme-color);
+    outline-offset: 3px;
+  }
+}
+
 body.fixed-top-nav {
   padding-top: 76px;
 }
