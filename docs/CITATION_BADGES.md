@@ -14,9 +14,15 @@ Never put the key in a committed file or browser JavaScript. For a local refresh
 python3 bin/update_semantic_scholar_citations.py --prompt-key
 ```
 
-The updater uses Python's standard library and curl. It waits two seconds before
-each request, retries transient errors with backoff, and keeps each failed paper's
-cached count and timestamp. It validates titles and nonnegative integer counts.
+The updater uses Python's standard library and curl. It waits ten seconds before
+each request. Network errors, HTTP 408/429, and server errors are retried up to
+three times with additional waits of 30, 90, and 180 seconds (40, 100, and 190
+seconds including the normal request interval). Other HTTP errors such as 401,
+403, and 404 fail immediately. Retry logs include the attempt number, HTTP status
+or curl exit code, and the next wait duration, without response bodies or secrets.
+The workflow allows 30 minutes for the three publications' worst-case retries.
+Each failed paper keeps its cached count and timestamp. The updater validates
+titles and nonnegative integer counts.
 Successful data is written atomically to `_data/semantic_scholar_citations.json`.
 
 Once published on the default branch, `Update citation counts` runs weekly on

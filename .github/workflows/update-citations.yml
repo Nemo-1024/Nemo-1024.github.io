@@ -16,7 +16,9 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    # Three papers can take up to 23 minutes if every request times out
+    # and all retries are exhausted; allow time to save and deploy the cache.
+    timeout-minutes: 30
     env:
       DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
     steps:

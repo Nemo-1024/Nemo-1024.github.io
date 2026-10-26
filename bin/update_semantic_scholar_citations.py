@@ -18,12 +18,34 @@ ROOT = Path(__file__).resolve().parents[1]
 PAPERS_PATH = ROOT / "_data/semantic_scholar_papers.json"
 CACHE_PATH = ROOT / "_data/semantic_scholar_citations.json"
 API = "https://api.semanticscholar.org/graph/v1/paper/"
-INTERVAL = 2.0  # Below the key's cumulative one-request-per-second limit.
-BACKOFF = (5, 15, 45)
+INTERVAL = 10.0  # Leave headroom below the key's cumulative rate limit.
+BACKOFF = (30, 90, 180)
 
 
 def normalized_title(title):
     return "".join(c for c in unicodedata.normalize("NFKC", title).casefold() if c.isalnum())
+
+
+def safe_error_detail(error):
+    """Only expose messages generated here, never arbitrary remote content."""
+    message = str(error)
+    if isinstance(error, RuntimeError) and re.fullmatch(
+        r"Semantic Scholar returned HTTP [0-9]{3}|Network request failed \(curl exit [0-9]+\)",
+        message,
+    ):
+        return message
+    return type(error).__name__
+
+
+def wait_to_retry(paper_id, attempt, error, sleep):
+    delay = BACKOFF[attempt]
+    print(
+        f"{paper_id}: {safe_error_detail(error)}; "
+        f"attempt {attempt + 1}/{len(BACKOFF) + 1} failed; "
+        f"next request in {delay + INTERVAL:g}s",
+        file=sys.stderr, flush=True,
+    )
+    sleep(delay)
 
 
 def request_paper(paper_id, api_key):
@@ -47,10 +69,10 @@ def fetch_paper(paper, api_key, request=request_paper, sleep=time.sleep):
         sleep(INTERVAL)
         try:
             status, body = request(paper["id"], api_key)
-        except RuntimeError:
+        except RuntimeError as error:
             if attempt == len(BACKOFF):
                 raise
-            sleep(BACKOFF[attempt])
+            wait_to_retry(paper["id"], attempt, error, sleep)
             continue
         if status == 200:
             data = json.loads(body)
@@ -69,10 +91,11 @@ def fetch_paper(paper, api_key, request=request_paper, sleep=time.sleep):
                 "url": "https://www.semanticscholar.org/paper/" + paper_id,
                 "updated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
             }
-        if (status == 429 or status >= 500) and attempt < len(BACKOFF):
-            sleep(BACKOFF[attempt])
+        error = RuntimeError(f"Semantic Scholar returned HTTP {status}")
+        if (status in (408, 429) or status >= 500) and attempt < len(BACKOFF):
+            wait_to_retry(paper["id"], attempt, error, sleep)
             continue
-        raise RuntimeError(f"Semantic Scholar returned HTTP {status}")
+        raise error
 
 
 def refresh(papers, cache, api_key, fetch=fetch_paper):
@@ -81,10 +104,10 @@ def refresh(papers, cache, api_key, fetch=fetch_paper):
     for bib_key, paper in papers.items():
         try:
             updated[bib_key] = fetch(paper, api_key)
-            print(f"{bib_key}: {updated[bib_key]['citation_count']} citations")
+            print(f"{bib_key}: {updated[bib_key]['citation_count']} citations", flush=True)
         except (RuntimeError, ValueError, KeyError, OSError) as error:
             # Do not print response bodies/headers: they can contain secrets.
-            print(f"{bib_key}: {type(error).__name__}; retaining previous data", file=sys.stderr)
+            print(f"{bib_key}: {safe_error_detail(error)}; retaining previous data", file=sys.stderr, flush=True)
             failures.append(bib_key)
     return updated, failures
 
