@@ -3,6 +3,7 @@ name: Update citation counts
 on:
   schedule:
     - cron: "17 2 * * 1" # Mondays around 10:17 Asia/Shanghai; GitHub may delay scheduled runs.
+    - cron: "17 2 * * 2-6,0" # Recovery only: skip papers already refreshed this UTC week.
   workflow_dispatch:
 
 permissions:
@@ -29,13 +30,35 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
+      - name: Check for pending publications
+        id: pending
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            echo "needed=true" >> "$GITHUB_OUTPUT"
+          else
+            needed=$(python3 bin/update_semantic_scholar_citations.py --check-stale)
+            echo "needed=$needed" >> "$GITHUB_OUTPUT"
+            if [ "$needed" = "false" ]; then
+              echo "All publications have been refreshed this UTC week; no API calls or deployment needed."
+            fi
+          fi
       - name: Refresh citation counts
         id: refresh
+        if: steps.pending.outputs.needed == 'true'
         continue-on-error: true
         env:
           SEMANTIC_SCHOLAR_API_KEY: ${{ secrets.SEMANTIC_SCHOLAR_API_KEY }}
-        run: python3 bin/update_semantic_scholar_citations.py
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            python3 bin/update_semantic_scholar_citations.py
+          else
+            python3 bin/update_semantic_scholar_citations.py --stale-only
+          fi
       - name: Save successful updates
+        if: steps.pending.outputs.needed == 'true'
         run: |
           if [ -f _data/semantic_scholar_citations.json ]; then
             git add _data/semantic_scholar_citations.json
@@ -48,6 +71,7 @@ jobs:
             fi
           fi
       - name: Deploy cached citation counts
+        if: steps.pending.outputs.needed == 'true'
         # GITHUB_TOKEN pushes do not trigger the deploy workflow; dispatch it
         # explicitly. This also retries deployment after a previous failure.
         env:
@@ -60,4 +84,5 @@ jobs:
         if: steps.refresh.outcome == 'failure'
         run: |
           echo "Some citation counts could not be refreshed. Previous values were retained."
+          echo "The next scheduled recovery will retry only publications still missing a successful refresh this UTC week."
           exit 1

@@ -2,7 +2,7 @@
 """Refresh a small, explicitly mapped set of publication citation counts."""
 
 import argparse
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import getpass
 import json
 import os
@@ -24,6 +24,35 @@ BACKOFF = (30, 90, 180)
 
 def normalized_title(title):
     return "".join(c for c in unicodedata.normalize("NFKC", title).casefold() if c.isalnum())
+
+
+def pending_papers(papers, cache, now=None):
+    """Select papers without a valid successful refresh in the current UTC week.
+
+    Failed lookups never advance updated_at, so the cache itself is the durable
+    recovery queue. A Monday boundary avoids shifting the weekly refresh date
+    when a previous week's successful recovery happened later in the week.
+    """
+    now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
+    week_start = (now - timedelta(days=now.weekday())).replace(hour=0, minute=0, second=0, microsecond=0)
+    pending = {}
+    for key, paper in papers.items():
+        record = cache.get(key)
+        try:
+            updated_at = datetime.fromisoformat(record["updated_at"])
+            valid = (
+                updated_at.tzinfo is not None
+                and week_start <= updated_at <= now
+                and type(record["citation_count"]) is int
+                and record["citation_count"] >= 0
+                and normalized_title(record["title"]) == normalized_title(paper["title"])
+                and re.fullmatch(r"[0-9a-f]{40}", record["paper_id"]) is not None
+            )
+        except (AttributeError, KeyError, TypeError, ValueError):
+            valid = False
+        if not valid:
+            pending[key] = paper
+    return pending
 
 
 def safe_error_detail(error):
@@ -115,14 +144,34 @@ def refresh(papers, cache, api_key, fetch=fetch_paper):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--prompt-key", action="store_true", help="Read the API key without echoing it")
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--stale-only", action="store_true", help="Refresh only papers not successfully updated this UTC week")
+    mode.add_argument("--check-stale", action="store_true", help="Print true/false for pending papers without API calls or an API key")
     args = parser.parse_args()
+    papers = json.loads(PAPERS_PATH.read_text())
+    cache = json.loads(CACHE_PATH.read_text()) if CACHE_PATH.exists() else {}
+    selected = pending_papers(papers, cache) if args.stale_only or args.check_stale else papers
+    if args.check_stale:
+        print("true" if selected else "false")
+        return 0
+    if not selected:
+        print("No pending publications; no API calls or cache changes needed.")
+        return 0
     api_key = getpass.getpass("Semantic Scholar API key: ") if args.prompt_key else os.environ.get("SEMANTIC_SCHOLAR_API_KEY", "")
     api_key = api_key.strip()
     if not api_key or "\n" in api_key or "\r" in api_key:
         parser.error("Set SEMANTIC_SCHOLAR_API_KEY or use --prompt-key")
-    papers = json.loads(PAPERS_PATH.read_text())
-    cache = json.loads(CACHE_PATH.read_text()) if CACHE_PATH.exists() else {}
-    updated, failures = refresh(papers, cache, api_key)
+    updated, failures = refresh(selected, cache, api_key)
+    summary = (
+        f"Citation refresh: {len(selected) - len(failures)} succeeded, "
+        f"{len(failures)} failed, {len(papers) - len(selected)} skipped. "
+        "Failed papers retain their previous counts and timestamps."
+    )
+    print(summary, flush=True)
+    summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
+    if summary_path:
+        with Path(summary_path).open("a") as handle:
+            handle.write(summary + "\n")
     if updated != cache:
         temporary = CACHE_PATH.with_suffix(".json.tmp")
         temporary.write_text(json.dumps(updated, indent=2, ensure_ascii=False) + "\n")
