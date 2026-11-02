@@ -9,15 +9,15 @@
   "chen2025unlocking": {
     "paper_id": "4cfee2238bedc16f817ec1e6b0f4aa5e637a8560",
     "title": "Unlocking the Power of Diffusion Models in Sequential Recommendation: A Simple and Effective Approach",
-    "citation_count": 20,
+    "citation_count": 21,
     "url": "https://www.semanticscholar.org/paper/4cfee2238bedc16f817ec1e6b0f4aa5e637a8560",
-    "updated_at": "2026-10-26T10:38:22+00:00"
+    "updated_at": "2026-11-02T09:36:54+00:00"
   },
   "chen2023deep": {
     "paper_id": "0cdd00722929abc0cbc979062064ae8393a69283",
     "title": "Deep Generative Imputation Model for Missing Not At Random Data",
     "citation_count": 19,
     "url": "https://www.semanticscholar.org/paper/0cdd00722929abc0cbc979062064ae8393a69283",
-    "updated_at": "2026-10-26T10:39:13+00:00"
+    "updated_at": "2026-11-02T09:37:44+00:00"
   }
 }
